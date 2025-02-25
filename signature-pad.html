@@ -55,14 +55,14 @@
         alert("Пожалуйста, нарисуйте подпись!");
         return;
       }
-      const imageData = signaturePad.toDataURL("image/png"); // Получаем подпись в base64
-      console.log("Отправка подписи:", imageData); // для отладки в консоли
+      const imageData = signaturePad.toDataURL("image/png");
+      console.log("Отправка подписи:", imageData.slice(0, 30) + "..."); // Выводим первые 30 символов для отладки
       Telegram.WebApp.sendData(imageData);
-      // Закрываем WebApp после отправки
+      alert("Подпись отправлена!");
       Telegram.WebApp.close();
     }
 
-    // Функция для масштабирования canvas
+    // Корректное масштабирование canvas
     function resizeCanvas() {
       const ratio = Math.max(window.devicePixelRatio || 1, 1);
       canvas.width = canvas.offsetWidth * ratio;
