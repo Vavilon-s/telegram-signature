@@ -55,15 +55,21 @@
         alert("Пожалуйста, нарисуйте подпись!");
         return;
       }
-      const imageData = signaturePad.toDataURL("image/png");
+      // Создаем offscreen canvas с уменьшенным разрешением (например, 50% от оригинала)
+      const offscreen = document.createElement("canvas");
+      offscreen.width = canvas.width * 0.5;
+      offscreen.height = canvas.height * 0.5;
+      const offCtx = offscreen.getContext("2d");
+      offCtx.drawImage(canvas, 0, 0, offscreen.width, offscreen.height);
+
+      const imageData = offscreen.toDataURL("image/png");
       console.log("Отправка подписи:", imageData.slice(0, 30) + "...");
-      // Отправляем данные боту через Telegram WebApp API
       Telegram.WebApp.sendData(imageData);
       alert("Подпись отправлена!");
       Telegram.WebApp.close();
     }
 
-    // Масштабирование canvas
+    // Корректное масштабирование canvas
     function resizeCanvas() {
       const ratio = Math.max(window.devicePixelRatio || 1, 1);
       canvas.width = canvas.offsetWidth * ratio;
